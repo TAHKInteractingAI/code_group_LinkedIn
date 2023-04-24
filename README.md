@@ -1,12 +1,10 @@
 # Tool linkedin
-
-## Cách chạy tool
-
 Download project về máy
 
 ```bash
 git clone https://github.com/botsamqntdata/tool_linkedin.git
 ```
+## Thiết lập môi trường để chạy tool
 Mở cmd trong project và tạo môi trường ảo trong folder vừa tải, trước đó phải cài python trên máy
 ``` bash
 python -m venv venv
