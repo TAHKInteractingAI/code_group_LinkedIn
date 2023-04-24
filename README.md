@@ -15,6 +15,10 @@ Kích hoạt môi trường ảo
 ``` bash
 venv\Scripts\activate.bat
 ```
+Cài đặt các thư viện cần thiết
+```bash
+pip install -r requirements.txt
+```
 Thay đổi thông tin trong file Account.cfg
 ```python
 [API_KEYS]
