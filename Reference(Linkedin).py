@@ -170,7 +170,7 @@ def get_edited():
     # from csv, check if group is already in requested or joined
     driver.get('https://www.linkedin.com/groups')
     # Check for each joined group is in csv files
-    groups = driver.find_elements_by_class_name("ember-view link-without-visited-state t-black")
+    groups = driver.find_elements(By.CLASS_NAME, "ember-view link-without-visited-state t-black")
     # Make a copy of the keyword csv
     filename = 'Demo.csv'
     df = pd.read_csv(filename)
@@ -182,7 +182,7 @@ def get_edited():
 
     # Go to linkedin.com/groups/requested
     driver.get('https://www.linkedin.com/groups/requests')
-    groups = driver.find_elements_by_class_name("ember-view link-without-visited-state t-black")
+    groups = driver.find_elements(By.CLASS_NAME,"ember-view link-without-visited-state t-black")
     # Make a copy of the keyword csv
     for group in groups:
         if group in copy:
@@ -198,8 +198,8 @@ def join_group():
         url = websites[i]
         driver.get(url)
         time.sleep(5)
-        if len(driver.find_elements_by_xpath("/html/body/div[6]/div[3]/div/div[2]/div/div/main/div/div[1]/section/div/button/span")) > 0:
-            driver.find_element_by_xpath("/html/body/div[6]/div[3]/div/div[2]/div/div/main/div/div[1]/section/div/button/span").click()
+        if len(driver.find_elements(By.XPATH, "/html/body/div[6]/div[3]/div/div[2]/div/div/main/div/div[1]/section/div/button/span")) > 0:
+            driver.find_element(By.XPATH,"/html/body/div[6]/div[3]/div/div[2]/div/div/main/div/div[1]/section/div/button/span").click()
             time.sleep(3)
         i +=1
     #check for current status
@@ -215,12 +215,12 @@ def check_status():
     time.sleep(5)
     status = []
     # check the joined page
-    num_of_joined = len(driver.find_elements_by_xpath("//a[contains(@class, 'ember-view link-without-visited-state t-black')]"))
+    num_of_joined = len(driver.find_elements(By.XPATH,"//a[contains(@class, 'ember-view link-without-visited-state t-black')]"))
     time.sleep(3)
     #check the num of requests
     driver.get('https://www.linkedin.com/groups/requests')
     time.sleep(5)
-    num_of_requests = len(driver.find_elements_by_xpath("//a[contains(@class, 'ember-view link-without-visited-state t-black')]"))
+    num_of_requests = len(driver.find_elements(By.XPATH,"//a[contains(@class, 'ember-view link-without-visited-state t-black')]"))
     status = [num_of_joined, num_of_requests]
     return status
 
@@ -231,13 +231,13 @@ def get_result():
     time.sleep(3)
     driver.get('https://www.linkedin.com/groups')
     time.sleep(5)
-    links = [elem.get_attribute("href") for elem in driver.find_elements_by_xpath('//a[contains(@class, "ember-view link-without-visited-state t-black")]')]
+    links = [elem.get_attribute("href") for elem in driver.find_elements(By.XPATH,'//a[contains(@class, "ember-view link-without-visited-state t-black")]')]
     for link in links:
         print(links)
         driver.get(link)
         time.sleep(5)
-        date_joined = driver.find_element_by_xpath("//p[contains(@class, 't-12 t-black--light')]").text.replace('Joined group: ', '')
-        name = driver.find_element_by_tag_name('h1').text
+        date_joined = driver.find_element(By.XPATH,"//p[contains(@class, 't-12 t-black--light')]").text.replace('Joined group: ', '')
+        name = driver.find_element(By.TAG_NAME, 'h1').text
         allstatus['Name'].append(name)
         allstatus['LinkedIn group'].append(link)
         allstatus['Result'].append('Joined')
@@ -251,11 +251,11 @@ def get_result():
     time.sleep(3)
     driver.get('https://www.linkedin.com/groups/requests')
     time.sleep(5)
-    links = [elem.get_attribute("href") for elem in driver.find_elements_by_xpath('//a[contains(@class, "ember-view link-without-visited-state t-black")]')]
+    links = [elem.get_attribute("href") for elem in driver.find_elements(By.XPATH,'//a[contains(@class, "ember-view link-without-visited-state t-black")]')]
     for link in links:
         driver.get(link)
         time.sleep(5)
-        name = driver.find_element_by_tag_name('h1').text
+        name = driver.find_element(By.TAG_NAME, 'h1').text
         date_joined = datetime.today().strftime('%m/%d/%Y')
         allstatus['Name'].append(name)
         allstatus['LinkedIn group'].append(link)
@@ -289,16 +289,16 @@ def post_and_get_link_in_group():
             driver.get(df['Linkedin group'][i])
             # check if group is joined
             time.sleep(3)
-            grp_status = len(driver.find_elements_by_xpath('//button[contains(@class, "white-space-nowrap mt4 artdeco-button artdeco-button--2 artdeco-button--primary ember-view")]'))
+            grp_status = len(driver.find_elements(By.XPATH,'//button[contains(@class, "white-space-nowrap mt4 artdeco-button artdeco-button--2 artdeco-button--primary ember-view")]'))
             if grp_status == 0:
                 # find the post button and post
                 time.sleep(5)
-                text_button = driver.find_element_by_xpath("//button[contains(@class, 'artdeco-button artdeco-button--muted artdeco-button--4 artdeco-button--tertiary ember-view share-box-feed-entry__trigger')]")
+                text_button = driver.find_element(By.XPATH,"//button[contains(@class, 'artdeco-button artdeco-button--muted artdeco-button--4 artdeco-button--tertiary ember-view share-box-feed-entry__trigger')]")
                 text_button.click()
                 time.sleep(2)
-                driver.find_element_by_class_name("ql-editor").send_keys(df['Content'][i])
+                driver.find_element(By.CLASS_NAME,"ql-editor").send_keys(df['Content'][i])
                 time.sleep(random.randint(3,9))
-                post_button = driver.find_element_by_xpath(
+                post_button = driver.find_element(By.XPATH,
                     "//button[contains(@class, 'share-actions__primary-action artdeco-button artdeco-button--2 artdeco-button--primary ember-view')]")
                 post_button.click()
                 # get today's date as the date posted
@@ -307,20 +307,20 @@ def post_and_get_link_in_group():
                 df.loc[i, 'Date'] = post_date
                 # Get the link
                 time.sleep(3)
-                if len(driver.find_elements_by_xpath('//a[contains(@class, "post-post-framework-toast-cta t-black")]')) > 0:
-                    df.loc[i, 'Result'] = driver.find_element_by_xpath('//a[contains(@class, "post-post-framework-toast-cta t-black")]').get_attribute('href')
-                elif len(driver.find_elements_by_xpath('//a[contains(@class, "artdeco-toast-item__cta")]')) > 0:
-                    df.loc[i, 'Result'] = driver.find_element_by_xpath('//a[contains(@class, "artdeco-toast-item__cta")]').get_attribute('href')
-                elif len(driver.find_elements_by_xpath('//p[contains(@class, "artdeco-toast-item__message")]')) == 0:
-                    post_link = driver.find_element_by_xpath("//div[contains(@class, 'feed-shared-update-v2 feed-shared-update-v2--minimal-padding full-height relative feed-shared-update-v2--e2e feed-shared-update-v2--wrapped ember-view')]").get_attribute('data-urn')
+                if len(driver.find_elements(By.XPATH,'//a[contains(@class, "post-post-framework-toast-cta t-black")]')) > 0:
+                    df.loc[i, 'Result'] = driver.find_element(By.XPATH,'//a[contains(@class, "post-post-framework-toast-cta t-black")]').get_attribute('href')
+                elif len(driver.find_elements(By.XPATH,'//a[contains(@class, "artdeco-toast-item__cta")]')) > 0:
+                    df.loc[i, 'Result'] = driver.find_element(By.XPATH,'//a[contains(@class, "artdeco-toast-item__cta")]').get_attribute('href')
+                elif len(driver.find_elements(By.XPATH,'//p[contains(@class, "artdeco-toast-item__message")]')) == 0:
+                    post_link = driver.find_element(By.XPATH,"//div[contains(@class, 'feed-shared-update-v2 feed-shared-update-v2--minimal-padding full-height relative feed-shared-update-v2--e2e feed-shared-update-v2--wrapped ember-view')]").get_attribute('data-urn')
                     df.loc[i, 'Result'] = 'http://www.linkedin.com/feed/update' + post_link
                 else:
                     print('You have shared this post previously')
                     df.loc[i, 'Result'] = 'You have shared this post previously'
                     df.loc[i,'Date'] = ''
-                    driver.find_element_by_xpath('//button[contains(@class, "artdeco-modal__dismiss artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--2 artdeco-button--tertiary ember-view")]').click()
+                    driver.find_element(By.XPATH,'//button[contains(@class, "artdeco-modal__dismiss artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--2 artdeco-button--tertiary ember-view")]').click()
                     time.sleep(2)
-                    driver.find_element_by_xpath('//button[contains(@class, "artdeco-modal__confirm-dialog-btn artdeco-button artdeco-button--2 artdeco-button--primary ember-view")]').click()
+                    driver.find_element(By.XPATH,'//button[contains(@class, "artdeco-modal__confirm-dialog-btn artdeco-button artdeco-button--2 artdeco-button--primary ember-view")]').click()
                     continue
             else:
                 print('You have not joined the group/Your request has not been accepted')
@@ -387,7 +387,7 @@ if __name__ == '__main__':
 
     time.sleep(1)
 
-    driver.quit()
+    self.driver.quit()
     ###@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     ### Get time of a Python program's execution
     ## start_time = datetime.now()
