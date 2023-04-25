@@ -27,7 +27,11 @@ linkedin_username =
 linkedin_password = 
 ```
 
-## Chạy tool linkedin group bằng câu lệnh
+## Chạy tool auto join group bằng câu lệnh
 ```bash
 python LinkedIn_group_tool_Feature123.py
+```
+## Chạy tool auto post group bằng câu lệnh
+```bash
+python Auto_post_group.py
 ```
